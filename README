@@ -1,0 +1,19 @@
+# Build websocket-example.war and place in /target folder
+mvn package
+
+# Build docker image (run this in the main project folder 'websocket-example')
+# Look in the Dockerfile to see the contents of this image.  It's based on Tomcat 9 and OpenDJK 8
+docker build -t websocket-example .
+
+# Run docker container in the background (detached), exposing it on port 8080
+docker run -d -p 8080:8080 --name websocket-example websocket-example
+
+# If you need to rebuild your running docker image/container and re-deploy it in docker
+# Run this in the main project folder 'websocket-example'
+docker stop websocket-example && docker rm websocket-example
+docker build -t websocket-example .
+docker run -d -p 8080:8080 --name websocket-example websocket-example
+
+
+# You can access the app locally in your browser at:
+http://localhost:8080/websocket-example/
