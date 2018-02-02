@@ -18,13 +18,12 @@ docker run -d -p 8080:8080 --name websocket-example websocket-example
 # You can access the app locally in your browser at:
 http://localhost:8080/websocket-example/
 
-# Deploy image to Docker Clound (Hub).
+# Deploy image to Docker Cloud (Hub).
 export DOCKER_ID_USER="anschoewe"
 docker login
-docker tag websocket-example anschoewe/websocket-example
-docker tag websocket-example anschoewe/websocket-example:myfirstimagepush
+docker tag websocket-example anschoewe/websocket-example:latest
+docker push anschoewe/websocket-example:latest
 
-docker push anschoewe/websocket-example
-docker push anschoewe/websocket-example:myfirstimagepush
-
-docker push anschoewe/websocket-example:myfirstimagepush
+# Retrieve image from Docker Cloud (Hub) and run it
+docker pull anschoewe/websocket-example:latest
+docker run -d -p 8080:8080 --name websocket-example anschoewe/websocket-example:latest
