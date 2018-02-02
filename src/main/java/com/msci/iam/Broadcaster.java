@@ -39,7 +39,7 @@ public class Broadcaster
 	
 	public void start() {
 		long delay  = 1000L; //wait 1 sec before starting...
-    long period = 3000L; //then repeat task every 3 seconds
+    long period = 7000L; //then repeat task every 7 seconds
 		this.timer.schedule(task, delay, period);
 	}
 	
