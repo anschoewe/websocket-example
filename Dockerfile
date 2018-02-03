@@ -3,7 +3,7 @@
 # The second stage takes the WAR file created in the first stage and copies it into Tomcat image.
 # The intermediate BUILD image is then discarded.  You will run the final image built off of Tomcat.
 
-FROM maven:latest AS BUILD
+FROM maven:3.5.2-jdk-8-alpine AS BUILD
 WORKDIR /websocket-example
 COPY . .
 RUN mvn clean package
