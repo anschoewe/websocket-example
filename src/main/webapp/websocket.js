@@ -4,6 +4,10 @@ function connect() {
     var username = document.getElementById("username").value;
     
     var host = document.location.host;
+    var port = document.location.port;
+    if(port === null) {
+    		host =  host + ":80";
+    }
     var pathname = document.location.pathname;
     
     ws = new WebSocket("ws://" +host  + pathname + "realtime/" + username);
