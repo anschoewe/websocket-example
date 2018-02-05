@@ -9,6 +9,8 @@ COPY . .
 RUN mvn clean package
 
 FROM tomcat:9.0.4-jre8-alpine
-COPY --from=BUILD /websocket-example/target/websocket-example.war webapps/websocket-example.war
+# Remove the default 'root' application and replace it with my application (must be called ROOT)
+RUN rm -fr webapps/ROOT
+COPY --from=BUILD /websocket-example/target/websocket-example.war webapps/ROOT.war
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
