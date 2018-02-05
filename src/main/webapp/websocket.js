@@ -5,7 +5,7 @@ function connect() {
     
     var host = document.location.host;
     var port = document.location.port;
-    if(port === null) {
+    if(port === null || port === "") {
     		host =  host + ":80";
     }
     var pathname = document.location.pathname;
