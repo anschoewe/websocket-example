@@ -14,7 +14,7 @@ docker run -d -p 8080:8080 --name websocket-example websocket-example
 # Run this in the main project folder 'websocket-example'
 docker stop websocket-example && docker rm websocket-example
 docker build -t websocket-example .
-docker run -d -p 8080:8080 --name websocket-example websocket-example
+docker run -d -p 8080:8080 -p 8443:8443 --name websocket-example websocket-example
 
 
 # You can access the app locally in your browser at:

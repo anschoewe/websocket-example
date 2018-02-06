@@ -3,14 +3,16 @@ var ws;
 function connect() {
     var username = document.getElementById("username").value;
     
+    var protocol = document.location.protocol;
     var host = document.location.host;
-    var port = document.location.port;
-    if(port === null || port === "") {
-    		host =  host + ":80";
-    }
     var pathname = document.location.pathname;
+    var websocketProtocol = "ws:";
     
-    ws = new WebSocket("ws://" +host  + pathname + "realtime/" + username);
+    if(protocol === "https:") {
+    		websocketProtocol = "wss:";
+    }
+    
+    ws = new WebSocket(websocketProtocol + "//" +host  + pathname + "realtime/" + username);
 
     ws.onmessage = function(event) {
     var log = document.getElementById("log");
