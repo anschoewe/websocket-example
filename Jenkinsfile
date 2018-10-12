@@ -7,24 +7,32 @@ pipeline {
 
   }
   stages {
-    stage('Build') {
+    stage('Build Jar') {
       steps {
         echo 'Building...'
         sh 'mvn -B -DskipTests clean package'
       }
     }
-    stage('Test') {
+    stage('Test Java') {
+      post {
+        always {
+          junit 'target/surefire-reports/*.xml'
+
+        }
+
+      }
       steps {
         echo 'Testing...'
         sh 'mvn test'
       }
-      post {
-        always {
-          junit 'target/surefire-reports/*.xml'
-        }
-      }
     }
-    stage('Deploy') {
+    stage('Build Docker Image') {
+      agent {
+        dockerfile {
+          filename 'Dockerfile'
+        }
+
+      }
       steps {
         echo 'Deploying...'
       }
