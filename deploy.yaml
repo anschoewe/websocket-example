@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: websocket-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: websocket-front
+  template:
+    metadata:
+      labels:
+        app: websocket-front
+    spec:
+      containers:
+      - name: websocket-front
+        image: anschoewe/websocket-example:v8
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        ports:
+        - containerPort: 8443
+        env:
+        - name: KEY
+          value: "value"
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+   name: websocket-front-pdb
+spec:
+   minAvailable: 1
+   selector:
+     matchLabels:
+       app: websocket-front
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: websocket-front
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: websocket-front
