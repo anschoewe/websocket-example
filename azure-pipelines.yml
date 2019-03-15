@@ -9,6 +9,10 @@ trigger:
 pool:
   vmImage: 'Ubuntu-16.04'
 
+variables:
+    azureSubscriptionEndpoint: Contoso
+    azureContainerRegistry: myacrschoewe.azurecr.io
+
 steps:
 - task: Maven@3
   inputs:
@@ -20,3 +24,15 @@ steps:
     publishJUnitResults: false
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
+- task: Docker@1
+  displayName: Container registry login
+  inputs:
+    command: login
+    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    azureContainerRegistry: $(azureContainerRegistry)
+- task: Docker@1
+  displayName: Build Docker Image with Java app
+  inputs:
+    command: Build an image
+    dockerFile: Dockerfile
+    imageName: $(Build.Repository.Name)
