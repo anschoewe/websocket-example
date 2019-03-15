@@ -1,0 +1,53 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- master
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+variables:
+    azureSubscriptionEndpoint: pipelines-resource-manager
+    azureContainerRegistry: myacrschoewe.azurecr.io
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: false
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+- task: Docker@1
+  displayName: Container registry login
+  inputs:
+    command: login
+    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    azureContainerRegistry: $(azureContainerRegistry)
+- task: Docker@1
+  displayName: Build Docker Image with Java app
+  inputs:
+    command: Build an image
+    dockerFile: Dockerfile
+    imageName: $(Build.Repository.Name)
+- task: Docker@1
+  displayName: Tag image
+  inputs:
+    command: tag
+    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    azureContainerRegistry: $(azureContainerRegistry)
+    imageName: $(Build.Repository.Name):latest
+    arguments: $(azureContainerRegistry)/$(Build.Repository.Name):$(Build.BuildId)
+- task: Docker@1
+  displayName: Push image
+  inputs:
+    command: push
+    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    azureContainerRegistry: $(azureContainerRegistry)
+    imageName: $(Build.Repository.Name):$(Build.BuildId)

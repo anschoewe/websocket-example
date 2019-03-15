@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: websocket-front
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
+      maxSurge: 2
+  selector:
+    matchLabels:
+      app: websocket-front
+  template:
+    metadata:
+      labels:
+        app: websocket-front
+    spec:
+      containers:
+      - name: websocket-front
+        image: anschoewe/websocket-example:latest
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        ports:
+        - containerPort: 8443
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+        env:
+        - name: KEY
+          value: "value"
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+   name: websocket-front-pdb
+spec:
+   minAvailable: 1
+   selector:
+     matchLabels:
+       app: websocket-front
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: websocket-front
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
+    name: http
+  - port: 443
+    targetPort: 8443
+    name: https
+  selector:
+    app: websocket-front
