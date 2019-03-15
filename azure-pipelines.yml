@@ -42,7 +42,7 @@ steps:
     command: tag
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistry)
-    imageName: $(azureContainerRegistry)/$(Build.Repository.Name):latest
+    imageName: $(Build.Repository.Name):latest
     arguments: $(azureContainerRegistry)/$(Build.Repository.Name):$(Build.BuildId)
 - task: Docker@1
   displayName: Push image
