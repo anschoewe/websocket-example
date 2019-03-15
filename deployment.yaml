@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: websocket-front
-        image: anschoewe/websocket-example:v8
+        image: anschoewe/websocket-example:latest
         resources:
           requests:
             cpu: 100m
@@ -24,6 +24,7 @@ spec:
             memory: 256Mi
         ports:
         - containerPort: 8443
+        - containerPort: 8080
         env:
         - name: KEY
           value: "value"
@@ -46,5 +47,10 @@ spec:
   type: LoadBalancer
   ports:
   - port: 80
+    targetPort: 8080
+    name: http
+  - port: 443
+    targetPort: 8443
+    name: https
   selector:
     app: websocket-front
