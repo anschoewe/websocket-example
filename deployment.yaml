@@ -3,7 +3,12 @@ kind: Deployment
 metadata:
   name: websocket-front
 spec:
-  replicas: 1
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
+      maxSurge: 1
   selector:
     matchLabels:
       app: websocket-front
@@ -25,6 +30,13 @@ spec:
         ports:
         - containerPort: 8443
         - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
         env:
         - name: KEY
           value: "value"
