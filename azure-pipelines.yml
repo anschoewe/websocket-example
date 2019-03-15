@@ -53,3 +53,4 @@ steps:
     imageName: $(Build.Repository.Name):$(Build.BuildId)
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifacts: drop'
+  name: websocket-drop
