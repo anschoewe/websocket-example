@@ -51,3 +51,8 @@ steps:
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistry)
     imageName: $(Build.Repository.Name):$(Build.BuildId)
+- task: CopyFiles@2
+  displayName: Copy K8 YAML file for release
+  inputs:
+    contents: deployment.yaml
+    targetFolder: $(Build.ArtifactStagingDirectory)
