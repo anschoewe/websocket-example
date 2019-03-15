@@ -51,6 +51,10 @@ steps:
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistry)
     imageName: $(Build.Repository.Name):$(Build.BuildId)
+- task: qetza.replacetokens.replacetokens-task.replacetokens@3
+  displayName: 'Replace tokens in **/*.yaml'
+  inputs:
+    targetFiles: '**/*.yaml'
 - task: CopyFiles@2
   displayName: Copy K8 YAML file for release
   inputs:
