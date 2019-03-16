@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: websocket-front
-        image: anschoewe/websocket-example:#{Build.BuildId}#
+        image: myacrschoewe.azurecr.io/anschoewe/websocket-example:#{Build.BuildId}#
         resources:
           requests:
             cpu: 100m
